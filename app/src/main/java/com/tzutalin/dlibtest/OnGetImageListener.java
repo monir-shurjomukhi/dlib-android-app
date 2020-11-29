@@ -16,6 +16,7 @@
 
 package com.tzutalin.dlibtest;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -59,6 +60,8 @@ public class OnGetImageListener implements OnImageAvailableListener {
 
   private int mScreenRotation = 90;
 
+  private Activity mActivity;
+
   private int mPreviewWdith = 0;
   private int mPreviewHeight = 0;
   private byte[][] mYUVBytes;
@@ -75,6 +78,10 @@ public class OnGetImageListener implements OnImageAvailableListener {
   private TrasparentTitleView mTransparentTitleView;
   private FloatingCameraWindow mWindow;
   private Paint mFaceLandmardkPaint;
+
+  public OnGetImageListener(Activity activity) {
+    mActivity = activity;
+  }
 
   public void initialize(
       final Context context,
@@ -222,7 +229,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
     drawResizedBitmap(mRGBframeBitmap, mCroppedBitmap);
 
     if (SAVE_PREVIEW_BITMAP) {
-      ImageUtils.saveBitmap(mCroppedBitmap);
+      ImageUtils.saveBitmap(mActivity, mCroppedBitmap);
     }
 
     mInferenceHandler.post(
@@ -244,7 +251,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
             mTransparentTitleView.setText("Time cost: " + String.valueOf((endTime - startTime) / 1000f) + " sec");
             Log.d(TAG, "run: results = " + results);
             // Draw on bitmap
-            if (results != null) {
+            if (results != null && results.size() > 0) {
               for (final VisionDetRet ret : results) {
                 float resizeRatio = 1.0f;
                 Rect bounds = new Rect();
@@ -264,6 +271,8 @@ public class OnGetImageListener implements OnImageAvailableListener {
                   canvas.drawCircle(pointX, pointY, 2, mFaceLandmardkPaint);
                 }
               }
+
+              ImageUtils.saveBitmap(mActivity, mRGBframeBitmap);
             }
 
             mWindow.setRGBBitmap(mCroppedBitmap);

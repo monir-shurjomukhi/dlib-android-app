@@ -16,6 +16,7 @@
 
 package com.tzutalin.dlibtest;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.annotation.Keep;
@@ -51,9 +52,9 @@ public class ImageUtils {
      *
      * @param bitmap The bitmap to save.
      */
-    public static void saveBitmap(final Bitmap bitmap) {
+    public static void saveBitmap(Activity activity, final Bitmap bitmap) {
         final String root =
-                Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dlib";
+                activity.getExternalFilesDir(null).getAbsolutePath() + File.separator + "dlib";
         Timber.tag(TAG).d(String.format("Saving %dx%d bitmap to %s.", bitmap.getWidth(), bitmap.getHeight(), root));
         final File myDir = new File(root);
 
