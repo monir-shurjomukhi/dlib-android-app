@@ -19,6 +19,7 @@ package com.tzutalin.dlibtest;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.io.InputStream;
  * Created by Tzutalin on 2016/3/30.
  */
 public class FileUtils {
+    private static final String TAG = "FileUtils";
     @NonNull
     public static final void copyFileFromRawToOthers(@NonNull final Context context, @RawRes int id, @NonNull final String targetPath) {
         InputStream in = context.getResources().openRawResource(id);
@@ -41,6 +43,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "copyFileFromRawToOthers: ", e);
         } finally {
             try {
                 if (in != null) {
@@ -51,6 +54,7 @@ public class FileUtils {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.e(TAG, "copyFileFromRawToOthers: ", e);
             }
         }
     }

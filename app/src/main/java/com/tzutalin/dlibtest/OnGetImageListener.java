@@ -236,16 +236,17 @@ public class OnGetImageListener implements OnImageAvailableListener {
         new Runnable() {
           @Override
           public void run() {
-            /*if (!new File(Constants.getFaceShapeModelPath()).exists()) {
+            if (!new File(Constants.getFaceShapeModelPath()).exists()) {
               mTransparentTitleView.setText("Copying landmark model to " + Constants.getFaceShapeModelPath());
               FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks, Constants.getFaceShapeModelPath());
-            }*/
+              //FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks2, Constants.getFaceShapeModelPath());
+            }
 
             long startTime = System.currentTimeMillis();
             List<VisionDetRet> results;
             synchronized (OnGetImageListener.this) {
-              //results = mFaceDet.detect(mCroppedBitmap);
-              results = mPedestrianDet.detect(mCroppedBitmap);
+              results = mFaceDet.detect(mCroppedBitmap);
+              //results = mPedestrianDet.detect(mCroppedBitmap);
             }
             long endTime = System.currentTimeMillis();
             mTransparentTitleView.setText("Time cost: " + String.valueOf((endTime - startTime) / 1000f) + " sec");
@@ -272,7 +273,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 }
               }
 
-              ImageUtils.saveBitmap(mActivity, mRGBframeBitmap);
+              //ImageUtils.saveBitmap(mActivity, mRGBframeBitmap);
             }
 
             mWindow.setRGBBitmap(mCroppedBitmap);

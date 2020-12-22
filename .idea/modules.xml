@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="dlib-android-app-master/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dlib/dlib.iml" filepath="$PROJECT_DIR$/.idea/modules/dlib/dlib.iml" group="dlib-android-app-master/dlib" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dlib-android-app-master.iml" filepath="$PROJECT_DIR$/.idea/modules/dlib-android-app-master.iml" group="dlib-android-app-master" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dlib-android-app-master.iml" filepath="$PROJECT_DIR$/.idea/modules/dlib-android-app-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/dlib-android-app-master.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/dlib-android-app-master.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dlib/dlib-android-app-master.dlib.iml" filepath="$PROJECT_DIR$/.idea/modules/dlib/dlib-android-app-master.dlib.iml" />
     </modules>
   </component>
 </project>

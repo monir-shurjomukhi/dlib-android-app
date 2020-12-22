@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks, targetPath);
+                    //FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks2, targetPath);
                 }
 
                 List<VisionDetRet> faceList = mFaceDet.detect(imgPath);
