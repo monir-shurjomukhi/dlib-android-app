@@ -37,6 +37,7 @@ import android.os.Trace;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.tzutalin.dlib.Constants;
 import com.tzutalin.dlib.FaceDet;
@@ -91,7 +92,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
     this.mContext = context;
     this.mTransparentTitleView = scoreView;
     this.mInferenceHandler = handler;
-    mFaceDet = new FaceDet(Constants.getFaceShapeModelPath());
+    mFaceDet = new FaceDet(Constants.getFaceShapeModelPath(mContext));
     mPedestrianDet = new PedestrianDet();
     mWindow = new FloatingCameraWindow(mContext);
 
@@ -118,7 +119,6 @@ public class OnGetImageListener implements OnImageAvailableListener {
   }
 
   private void drawResizedBitmap(final Bitmap src, final Bitmap dst) {
-
     Display getOrient = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     int orientation = Configuration.ORIENTATION_UNDEFINED;
     Point point = new Point();
@@ -236,10 +236,10 @@ public class OnGetImageListener implements OnImageAvailableListener {
         new Runnable() {
           @Override
           public void run() {
-            if (!new File(Constants.getFaceShapeModelPath()).exists()) {
-              mTransparentTitleView.setText("Copying landmark model to " + Constants.getFaceShapeModelPath());
-              FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks, Constants.getFaceShapeModelPath());
-              //FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks2, Constants.getFaceShapeModelPath());
+            if (!new File(Constants.getFaceShapeModelPath(mContext)).exists()) {
+              mTransparentTitleView.setText("Copying landmark model to " + Constants.getFaceShapeModelPath(mContext));
+              //FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks, Constants.getFaceShapeModelPath(mContext));
+              FileUtils.copyFileFromRawToOthers(mContext, R.raw.shape_predictor_68_face_landmarks2, Constants.getFaceShapeModelPath(mContext));
             }
 
             long startTime = System.currentTimeMillis();
@@ -282,5 +282,13 @@ public class OnGetImageListener implements OnImageAvailableListener {
         });
 
     Trace.endSection();
+  }
+
+  public void saveImage() {
+    Matrix matrix = new Matrix();
+    matrix.postRotate(90);
+    Bitmap rotatedBitmap =  Bitmap.createBitmap(mRGBframeBitmap, 0, 0,
+        mRGBframeBitmap.getWidth(), mRGBframeBitmap.getHeight(), matrix, true);
+    ImageUtils.saveBitmap(mActivity, rotatedBitmap);
   }
 }

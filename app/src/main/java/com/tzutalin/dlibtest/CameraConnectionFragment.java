@@ -39,6 +39,7 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
+import android.media.MediaActionSound;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -53,6 +54,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -224,6 +226,8 @@ public class CameraConnectionFragment extends Fragment {
    */
   private final Semaphore cameraOpenCloseLock = new Semaphore(1);
 
+  private ImageView captureImageView;
+
   /**
    * Shows a {@link Toast} on the UI thread.
    *
@@ -293,6 +297,15 @@ public class CameraConnectionFragment extends Fragment {
   public void onViewCreated(final View view, final Bundle savedInstanceState) {
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     mScoreView = (TrasparentTitleView) view.findViewById(R.id.results);
+    captureImageView = view.findViewById(R.id.captureImageView);
+    captureImageView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mOnGetPreviewListener.saveImage();
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
+      }
+    });
   }
 
   @Override

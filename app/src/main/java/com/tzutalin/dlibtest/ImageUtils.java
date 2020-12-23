@@ -23,6 +23,7 @@ import android.support.annotation.Keep;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -55,14 +56,15 @@ public class ImageUtils {
     public static void saveBitmap(Activity activity, final Bitmap bitmap) {
         final String root =
                 activity.getExternalFilesDir(null).getAbsolutePath() + File.separator + "dlib";
-        Timber.tag(TAG).d(String.format("Saving %dx%d bitmap to %s.", bitmap.getWidth(), bitmap.getHeight(), root));
+        Timber.tag(TAG).d(String.format(Locale.getDefault(), "Saving %dx%d bitmap to %s.",
+            bitmap.getWidth(), bitmap.getHeight(), root));
         final File myDir = new File(root);
 
         if (!myDir.mkdirs()) {
             Timber.tag(TAG).e("Make dir failed");
         }
 
-        final String fname = "preview.png";
+        final String fname = System.currentTimeMillis() + ".png";
         final File file = new File(myDir, fname);
         if (file.exists()) {
             file.delete();

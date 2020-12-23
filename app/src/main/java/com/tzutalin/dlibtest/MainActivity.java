@@ -296,10 +296,10 @@ public class MainActivity extends AppCompatActivity {
             protected List<VisionDetRet> doInBackground(Void... voids) {
                 // Init
                 if (mFaceDet == null) {
-                    mFaceDet = new FaceDet(Constants.getFaceShapeModelPath());
+                    mFaceDet = new FaceDet(Constants.getFaceShapeModelPath(MainActivity.this));
                 }
 
-                final String targetPath = Constants.getFaceShapeModelPath();
+                final String targetPath = Constants.getFaceShapeModelPath(MainActivity.this);
                 if (!new File(targetPath).exists()) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -307,8 +307,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Copy landmark model to " + targetPath, Toast.LENGTH_SHORT).show();
                         }
                     });
-                    FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks, targetPath);
-                    //FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks2, targetPath);
+                    //FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks, targetPath);
+                    FileUtils.copyFileFromRawToOthers(getApplicationContext(), R.raw.shape_predictor_68_face_landmarks2, targetPath);
                 }
 
                 List<VisionDetRet> faceList = mFaceDet.detect(imgPath);
