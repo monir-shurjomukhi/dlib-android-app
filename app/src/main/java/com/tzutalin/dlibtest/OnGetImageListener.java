@@ -289,6 +289,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
     matrix.postRotate(90);
     Bitmap rotatedBitmap =  Bitmap.createBitmap(mRGBframeBitmap, 0, 0,
         mRGBframeBitmap.getWidth(), mRGBframeBitmap.getHeight(), matrix, true);
-    ImageUtils.saveBitmap(mActivity, rotatedBitmap);
+    Bitmap resizedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 640, 960, false);
+    ImageUtils.saveBitmap(mActivity, resizedBitmap);
   }
 }
