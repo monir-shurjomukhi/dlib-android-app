@@ -40,9 +40,12 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
 import android.media.MediaActionSound;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -54,6 +57,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -226,7 +230,7 @@ public class CameraConnectionFragment extends Fragment {
    */
   private final Semaphore cameraOpenCloseLock = new Semaphore(1);
 
-  private ImageView captureImageView;
+  private ImageButton captureButton;
 
   /**
    * Shows a {@link Toast} on the UI thread.
@@ -297,13 +301,21 @@ public class CameraConnectionFragment extends Fragment {
   public void onViewCreated(final View view, final Bundle savedInstanceState) {
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     mScoreView = (TrasparentTitleView) view.findViewById(R.id.results);
-    captureImageView = view.findViewById(R.id.captureImageView);
-    captureImageView.setOnClickListener(new View.OnClickListener() {
+    captureButton = view.findViewById(R.id.captureButton);
+    captureButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         mOnGetPreviewListener.saveImage();
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+// Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          vibrator.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+          //deprecated in API 26
+          vibrator.vibrate(300);
+        }
       }
     });
   }

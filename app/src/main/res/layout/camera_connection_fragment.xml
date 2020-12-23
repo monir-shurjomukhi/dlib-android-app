@@ -30,13 +30,12 @@
     android:layout_alignParentTop="true"
     android:visibility="gone" />
 
-  <ImageView
-    android:id="@+id/captureImageView"
+  <ImageButton
+    android:id="@+id/captureButton"
     android:src="@drawable/ic_camera_alt_black_36dp"
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:layout_marginBottom="16dp"
-    android:tint="@android:color/darker_gray"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
 </RelativeLayout>
