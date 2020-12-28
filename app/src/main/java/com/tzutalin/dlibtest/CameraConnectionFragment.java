@@ -23,8 +23,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.RectF;
@@ -529,7 +531,14 @@ public class CameraConnectionFragment extends Fragment {
   @Override
   public void onAttach(Context context) {
     super.onAttach(context);
-    mOnGetPreviewListener = new OnGetImageListener(getActivity());
+    mOnGetPreviewListener = new OnGetImageListener(getActivity(), new OnFaceDetectedListener() {
+      @Override
+      public void onFaceDetected(Bitmap bitmap) {
+        MainActivity.sBitmap = bitmap;
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+      }
+    });
   }
 
   public static void back() {

@@ -78,10 +78,13 @@ public class OnGetImageListener implements OnImageAvailableListener {
   private PedestrianDet mPedestrianDet;
   private TrasparentTitleView mTransparentTitleView;
   private FloatingCameraWindow mWindow;
-  private Paint mFaceLandmardkPaint;
+  private Paint mFaceLandmarkPaint;
 
-  public OnGetImageListener(Activity activity) {
+  private OnFaceDetectedListener mFaceDetectedListener;
+
+  public OnGetImageListener(Activity activity, OnFaceDetectedListener faceDetectedListener) {
     mActivity = activity;
+    mFaceDetectedListener = faceDetectedListener;
   }
 
   public void initialize(
@@ -96,10 +99,10 @@ public class OnGetImageListener implements OnImageAvailableListener {
     mPedestrianDet = new PedestrianDet();
     mWindow = new FloatingCameraWindow(mContext);
 
-    mFaceLandmardkPaint = new Paint();
-    mFaceLandmardkPaint.setColor(Color.GREEN);
-    mFaceLandmardkPaint.setStrokeWidth(2);
-    mFaceLandmardkPaint.setStyle(Paint.Style.STROKE);
+    mFaceLandmarkPaint = new Paint();
+    mFaceLandmarkPaint.setColor(Color.GREEN);
+    mFaceLandmarkPaint.setStrokeWidth(2);
+    mFaceLandmarkPaint.setStyle(Paint.Style.STROKE);
   }
 
   public void deInitialize() {
@@ -261,7 +264,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 bounds.right = (int) (ret.getRight() * resizeRatio);
                 bounds.bottom = (int) (ret.getBottom() * resizeRatio);
                 Canvas canvas = new Canvas(mCroppedBitmap);
-                canvas.drawRect(bounds, mFaceLandmardkPaint);
+                canvas.drawRect(bounds, mFaceLandmarkPaint);
 
                 // Draw landmark
                 ArrayList<Point> landmarks = ret.getFaceLandmarks();
@@ -269,11 +272,12 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 for (Point point : landmarks) {
                   int pointX = (int) (point.x * resizeRatio);
                   int pointY = (int) (point.y * resizeRatio);
-                  canvas.drawCircle(pointX, pointY, 2, mFaceLandmardkPaint);
+                  canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
                 }
               }
 
               //ImageUtils.saveBitmap(mActivity, mRGBframeBitmap);
+              //mFaceDetectedListener.onFaceDetected(mRGBframeBitmap);
             }
 
             mWindow.setRGBBitmap(mCroppedBitmap);
