@@ -297,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
               .setTitle("Face det")
               .endConfig()
               .build();
+          mCard.clear();
           mCard.add(card);
         } else {
           Toast.makeText(getApplicationContext(), "No face", Toast.LENGTH_LONG).show();
