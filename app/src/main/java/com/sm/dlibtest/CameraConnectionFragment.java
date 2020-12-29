@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tzutalin.dlibtest;
+package com.sm.dlibtest;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.RectF;
@@ -61,8 +60,9 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.tzutalin.dlibtest.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

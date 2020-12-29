@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.tzutalin.dlibtest;
+package com.sm.dlibtest;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.support.annotation.Keep;
 import android.util.Base64;
 import android.util.Log;

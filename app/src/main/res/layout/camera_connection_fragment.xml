@@ -18,13 +18,13 @@
   android:layout_height="match_parent"
   xmlns:tools="http://schemas.android.com/tools">
 
-  <com.tzutalin.dlibtest.AutoFitTextureView
+  <com.sm.dlibtest.AutoFitTextureView
     android:id="@+id/texture"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true" />
 
-  <com.tzutalin.dlibtest.TrasparentTitleView
+  <com.sm.dlibtest.TrasparentTitleView
     android:id="@+id/results"
     android:layout_width="match_parent"
     android:layout_height="112dp"

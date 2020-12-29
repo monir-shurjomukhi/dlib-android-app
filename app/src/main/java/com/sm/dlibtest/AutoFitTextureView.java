@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tzutalin.dlibtest;
+package com.sm.dlibtest;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -14,7 +14,7 @@
  *
  */
 
-package com.tzutalin.dlibtest;
+package com.sm.dlibtest;
 
 import android.app.Application;
 import android.util.Log;

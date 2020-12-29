@@ -1,58 +1,63 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
-    buildToolsVersion "${rootProject.ext.androidBuildToolsVersion}"
+  compileSdkVersion rootProject.ext.androidCompileSdkVersion
+  buildToolsVersion "${rootProject.ext.androidBuildToolsVersion}"
 
-    defaultConfig {
-        applicationId "com.tzutalin.dlibtest"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.releaseVersionCode
-        versionName "${rootProject.ext.releaseVersionName}"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  defaultConfig {
+    applicationId "com.sm.dlibtest"
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode rootProject.ext.releaseVersionCode
+    versionName "${rootProject.ext.releaseVersionName}"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 
-    sourceSets {
-        main {
-            assets.srcDirs = ['src/main/res/raw']
-        }
+  sourceSets {
+    main {
+      assets.srcDirs = ['src/main/res/raw']
     }
+  }
 }
 
 
 buildscript {
-    repositories {
-        mavenCentral()
-    }
+  repositories {
+    mavenCentral()
+  }
 }
 
 repositories {
-    mavenCentral()
-    mavenLocal()
+  mavenCentral()
+  mavenLocal()
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.androidSupportSdkVersion}"
-    implementation "com.android.support:design:${rootProject.ext.androidSupportSdkVersion}"
-    implementation 'com.github.dexafree:materiallist:3.0.1'
-    implementation 'com.jakewharton.timber:timber:4.5.1'
-    implementation project(':dlib')
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation "com.android.support:appcompat-v7:${rootProject.ext.androidSupportSdkVersion}"
+  implementation "com.android.support:design:${rootProject.ext.androidSupportSdkVersion}"
+  implementation 'com.github.dexafree:materiallist:3.0.1'
+  implementation 'com.jakewharton.timber:timber:4.5.1'
+  implementation project(':dlib')
 
-    // Add AndroidJUnit
-    androidTestImplementation "com.android.support:support-annotations:${rootProject.ext.androidSupportSdkVersion}"
-    androidTestImplementation 'com.android.support.test:runner:0.5'
-    androidTestImplementation 'com.android.support.test:rules:0.5'
-    // Optional -- Hamcrest library
-    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
-    testImplementation 'junit:junit:4.12'
-    implementation 'junit:junit:4.12'
+  // Add AndroidJUnit
+  androidTestImplementation "com.android.support:support-annotations:${rootProject.ext.androidSupportSdkVersion}"
+  androidTestImplementation 'com.android.support.test:runner:1.0.2'
+  androidTestImplementation 'com.android.support.test:rules:1.0.2'
+  // Optional -- Hamcrest library
+  androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+  testImplementation 'junit:junit:4.12'
+  implementation 'junit:junit:4.12'
+
+  //networking library
+  implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+  implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+  implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
 }
 apply plugin: 'com.jakewharton.hugo'

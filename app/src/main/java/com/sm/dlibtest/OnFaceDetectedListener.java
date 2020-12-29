@@ -1,4 +1,4 @@
-package com.tzutalin.dlibtest;
+package com.sm.dlibtest;
 
 import android.graphics.Bitmap;
 
