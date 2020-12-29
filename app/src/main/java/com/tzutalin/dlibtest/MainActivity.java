@@ -6,7 +6,9 @@ package com.tzutalin.dlibtest;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -47,6 +49,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
   private List<Card> mCard = new ArrayList<>();
 
   public static Bitmap sBitmap;
+
+  private ProgressDialog progressDialog;
+  private AlertDialog alertDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +133,32 @@ public class MainActivity extends AppCompatActivity {
 
     mToolbar.setTitle(getString(R.string.app_name));
     Toast.makeText(MainActivity.this, getString(R.string.description_info), Toast.LENGTH_LONG).show();
+
+    progressDialog = new ProgressDialog(this);
+    progressDialog.setMessage("Please wait...");
+    progressDialog.setCancelable(false);
+  }
+
+  private void showProgress() {
+    progressDialog.show();
+  }
+
+  private void hideProgress() {
+    progressDialog.dismiss();
+  }
+
+  private void showAlert(String title, String message) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage(message);
+    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+      }
+    });
+    alertDialog = builder.create();
+    alertDialog.setTitle(title);
+    alertDialog.show();
   }
 
   public static final int REQUEST_CODE_IMAGE = 3;
@@ -220,7 +257,9 @@ public class MainActivity extends AppCompatActivity {
         String filePath = data.getStringExtra("filePath");
         Log.d(TAG, "onActivityResult: filePath = " + filePath);
         if (!TextUtils.isEmpty(filePath)) {
-          runDemosAsync(filePath);
+          //runDemosAsync(filePath);
+
+          detectFace(filePath);
         }
       } else {
         Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
@@ -228,6 +267,46 @@ public class MainActivity extends AppCompatActivity {
     } catch (Exception e) {
       Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
     }
+  }
+
+  private void detectFace(String filePath) {
+    showProgress();
+
+    File imageFile = new File(filePath);
+    MultipartBody.Part part = null;
+    try {
+      RequestBody fileBody = RequestBody.create(imageFile, MediaType.parse("image/*"));
+      part = MultipartBody.Part.createFormData("image", imageFile.getName(), fileBody);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    FaceDetectClient.getInstance().getApi().detectFace(part)
+        .enqueue(new Callback<FaceDetectResponse>() {
+          @Override
+          public void onResponse(Call<FaceDetectResponse> call, Response<FaceDetectResponse> response) {
+            Log.d(TAG, "onResponse: response.body() = " + response.body());
+            hideProgress();
+            if (response.isSuccessful()) {
+              FaceDetectResponse detectResponse = response.body();
+              if (detectResponse.predictions != null) {
+                showAlert("Result", "Found cow: " + detectResponse.predictions
+                    .detectionClasses.get(0).cowId);
+              } else {
+                showAlert("Result", detectResponse.message);
+              }
+            } else {
+              showAlert("Result", "Request Unsuccessful!");
+            }
+          }
+
+          @Override
+          public void onFailure(Call<FaceDetectResponse> call, Throwable t) {
+            Log.e(TAG, "onFailure: ", t);
+            hideProgress();
+            showAlert("Oops", "Something went wrong!");
+          }
+        });
   }
 
   // ==========================================================
