@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FaceDetectClient {
 
   private static final String FACE_DETECT_BASE_URL = "http://34.71.57.168:8000/";
+  //private static final String FACE_DETECT_BASE_URL = "http://192.168.68.147:8845/";
   private static FaceDetectClient retrofitClient;
   private Retrofit retrofit;
 

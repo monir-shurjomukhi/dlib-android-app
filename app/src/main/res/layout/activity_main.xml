@@ -32,6 +32,7 @@
     android:src="@drawable/gallery" />
 
   <Button
+    android:visibility="gone"
     android:id="@+id/btnSubmit"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

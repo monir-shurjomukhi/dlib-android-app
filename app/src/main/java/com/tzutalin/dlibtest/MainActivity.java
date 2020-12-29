@@ -273,13 +273,16 @@ public class MainActivity extends AppCompatActivity {
     showProgress();
 
     File imageFile = new File(filePath);
+    Log.d(TAG, "detectFace: imageFile.getAbsolutePath() = " + imageFile.getAbsolutePath());
     MultipartBody.Part part = null;
     try {
       RequestBody fileBody = RequestBody.create(imageFile, MediaType.parse("image/*"));
       part = MultipartBody.Part.createFormData("image", imageFile.getName(), fileBody);
     } catch (Exception e) {
-      e.printStackTrace();
+      Log.e(TAG, "detectFace: ", e);
     }
+
+    Log.d(TAG, "detectFace: part = " + part);
 
     FaceDetectClient.getInstance().getApi().detectFace(part)
         .enqueue(new Callback<FaceDetectResponse>() {
@@ -287,16 +290,21 @@ public class MainActivity extends AppCompatActivity {
           public void onResponse(Call<FaceDetectResponse> call, Response<FaceDetectResponse> response) {
             Log.d(TAG, "onResponse: response.body() = " + response.body());
             hideProgress();
-            if (response.isSuccessful()) {
-              FaceDetectResponse detectResponse = response.body();
-              if (detectResponse.predictions != null) {
-                showAlert("Result", "Found cow: " + detectResponse.predictions
-                    .detectionClasses.get(0).cowId);
+            try {
+              if (response.isSuccessful()) {
+                FaceDetectResponse detectResponse = response.body();
+                if (detectResponse.predictions != null) {
+                  showAlert("Result", "Found cow: " + detectResponse.predictions.detectionClass
+                  + "\nDistance error rate: " + detectResponse.predictions.distanceErrorRate);
+                } else {
+                  showAlert("Result", detectResponse.message);
+                }
               } else {
-                showAlert("Result", detectResponse.message);
+                showAlert("Result", "Request Unsuccessful!");
               }
-            } else {
-              showAlert("Result", "Request Unsuccessful!");
+            } catch (Exception e) {
+              Log.e(TAG, "onResponse: ", e);
+              showAlert("Oops", "Something went wrong!");
             }
           }
 

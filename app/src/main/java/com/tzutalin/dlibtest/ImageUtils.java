@@ -67,7 +67,7 @@ public class ImageUtils {
       Timber.tag(TAG).e("Make dir failed");
     }
 
-    final String fname = System.currentTimeMillis() + ".png";
+    final String fname = System.currentTimeMillis() + ".jpg";
     final File file = new File(myDir, fname);
     if (file.exists()) {
       file.delete();

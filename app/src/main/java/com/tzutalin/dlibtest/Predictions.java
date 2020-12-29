@@ -7,14 +7,19 @@ import java.util.List;
 
 public class Predictions {
 
-  @SerializedName("detection_classes")
+  @SerializedName("detection_class")
   @Expose
-  public List<DetectionClass> detectionClasses = null;
+  public String detectionClass;
+
+  @SerializedName("distance_error_rate")
+  @Expose
+  public float distanceErrorRate;
 
   @Override
   public String toString() {
     return "Predictions{" +
-        "detectionClasses=" + detectionClasses +
+        "detectionClass='" + detectionClass + '\'' +
+        ", distanceErrorRate=" + distanceErrorRate +
         '}';
   }
 }
