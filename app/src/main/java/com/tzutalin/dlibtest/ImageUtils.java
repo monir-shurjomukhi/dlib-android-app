@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

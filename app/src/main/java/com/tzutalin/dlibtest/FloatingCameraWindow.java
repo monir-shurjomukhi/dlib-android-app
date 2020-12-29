@@ -14,7 +14,7 @@
  *  imitations under the License.
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,8 +33,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.tzutalin.dlibtest.R;
 
 import java.lang.ref.WeakReference;
 

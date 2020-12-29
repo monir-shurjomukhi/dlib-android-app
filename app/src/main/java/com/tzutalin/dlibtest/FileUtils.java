@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

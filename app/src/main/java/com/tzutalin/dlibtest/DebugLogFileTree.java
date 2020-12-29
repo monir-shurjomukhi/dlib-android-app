@@ -14,7 +14,7 @@
  *
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;

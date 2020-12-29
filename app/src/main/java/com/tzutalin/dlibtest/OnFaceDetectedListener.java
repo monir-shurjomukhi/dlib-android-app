@@ -1,8 +1,4 @@
-package com.sm.dlibtest;
-
-import android.graphics.Bitmap;
-
-import java.io.File;
+package com.tzutalin.dlibtest;
 
 public interface OnFaceDetectedListener {
   public void onFaceDetected(String filePath);

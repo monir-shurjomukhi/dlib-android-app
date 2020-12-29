@@ -2,7 +2,7 @@
  *  Copyright (C) 2015-present TzuTaLin
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.Manifest;
 import android.app.Activity;
@@ -41,7 +41,6 @@ import com.tzutalin.dlib.Constants;
 import com.tzutalin.dlib.FaceDet;
 import com.tzutalin.dlib.PedestrianDet;
 import com.tzutalin.dlib.VisionDetRet;
-import com.tzutalin.dlibtest.R;
 
 import java.io.File;
 import java.util.ArrayList;

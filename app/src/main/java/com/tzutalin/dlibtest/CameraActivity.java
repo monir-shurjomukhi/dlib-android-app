@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -25,7 +25,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.tzutalin.dlibtest.R;
 
 /**
  * Created by darrenl on 2016/5/20.

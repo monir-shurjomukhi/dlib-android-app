@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sm.dlibtest;
+package com.tzutalin.dlibtest;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -62,7 +62,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.tzutalin.dlibtest.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -82,7 +81,7 @@ public class CameraConnectionFragment extends Fragment {
    * containing a DESIRED_SIZE x DESIRED_SIZE square.
    */
   private static final int MINIMUM_PREVIEW_SIZE = 320;
-  private static final String TAG = "CameraConnectionFragment";
+  private static final String TAG = "CameraConnectionFragmen";
 
   private TrasparentTitleView mScoreView;
 
