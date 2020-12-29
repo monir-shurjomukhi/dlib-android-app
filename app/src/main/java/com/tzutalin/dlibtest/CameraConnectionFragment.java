@@ -51,6 +51,7 @@ import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -307,6 +308,7 @@ public class CameraConnectionFragment extends Fragment {
     captureButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        Log.d(TAG, "onClick: ");
         mOnGetPreviewListener.saveImage();
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);
@@ -533,10 +535,20 @@ public class CameraConnectionFragment extends Fragment {
     super.onAttach(context);
     mOnGetPreviewListener = new OnGetImageListener(getActivity(), new OnFaceDetectedListener() {
       @Override
-      public void onFaceDetected(Bitmap bitmap) {
-        MainActivity.sBitmap = bitmap;
-        getActivity().setResult(Activity.RESULT_OK);
+      public void onFaceDetected(String filePath) {
+        Intent data = new Intent();
+        data.putExtra("filePath", filePath);
+        getActivity().setResult(Activity.RESULT_OK, data);
         getActivity().finish();
+      }
+
+      @Override
+      public void onLandmarkDetected(boolean isDetected) {
+        if (isDetected) {
+          captureButton.setVisibility(View.VISIBLE);
+        } else {
+          captureButton.setVisibility(View.GONE);
+        }
       }
     });
   }

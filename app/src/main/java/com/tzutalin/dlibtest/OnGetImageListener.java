@@ -63,11 +63,11 @@ public class OnGetImageListener implements OnImageAvailableListener {
 
   private Activity mActivity;
 
-  private int mPreviewWdith = 0;
+  private int mPreviewWidth = 0;
   private int mPreviewHeight = 0;
   private byte[][] mYUVBytes;
   private int[] mRGBBytes = null;
-  private Bitmap mRGBframeBitmap = null;
+  private Bitmap mRGBFrameBitmap = null;
   private Bitmap mCroppedBitmap = null;
 
   private boolean mIsComputing = false;
@@ -184,13 +184,13 @@ public class OnGetImageListener implements OnImageAvailableListener {
       final Plane[] planes = image.getPlanes();
 
       // Initialize the storage bitmaps once when the resolution is known.
-      if (mPreviewWdith != image.getWidth() || mPreviewHeight != image.getHeight()) {
-        mPreviewWdith = image.getWidth();
+      if (mPreviewWidth != image.getWidth() || mPreviewHeight != image.getHeight()) {
+        mPreviewWidth = image.getWidth();
         mPreviewHeight = image.getHeight();
 
-        Log.d(TAG, String.format("Initializing at size %dx%d", mPreviewWdith, mPreviewHeight));
-        mRGBBytes = new int[mPreviewWdith * mPreviewHeight];
-        mRGBframeBitmap = Bitmap.createBitmap(mPreviewWdith, mPreviewHeight, Config.ARGB_8888);
+        Log.d(TAG, String.format("Initializing at size %dx%d", mPreviewWidth, mPreviewHeight));
+        mRGBBytes = new int[mPreviewWidth * mPreviewHeight];
+        mRGBFrameBitmap = Bitmap.createBitmap(mPreviewWidth, mPreviewHeight, Config.ARGB_8888);
         mCroppedBitmap = Bitmap.createBitmap(INPUT_SIZE, INPUT_SIZE, Config.ARGB_8888);
 
         mYUVBytes = new byte[planes.length][];
@@ -211,7 +211,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
           mYUVBytes[1],
           mYUVBytes[2],
           mRGBBytes,
-          mPreviewWdith,
+          mPreviewWidth,
           mPreviewHeight,
           yRowStride,
           uvRowStride,
@@ -228,8 +228,8 @@ public class OnGetImageListener implements OnImageAvailableListener {
       return;
     }
 
-    mRGBframeBitmap.setPixels(mRGBBytes, 0, mPreviewWdith, 0, 0, mPreviewWdith, mPreviewHeight);
-    drawResizedBitmap(mRGBframeBitmap, mCroppedBitmap);
+    mRGBFrameBitmap.setPixels(mRGBBytes, 0, mPreviewWidth, 0, 0, mPreviewWidth, mPreviewHeight);
+    drawResizedBitmap(mRGBFrameBitmap, mCroppedBitmap);
 
     if (SAVE_PREVIEW_BITMAP) {
       ImageUtils.saveBitmap(mActivity, mCroppedBitmap);
@@ -269,15 +269,37 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 // Draw landmark
                 ArrayList<Point> landmarks = ret.getFaceLandmarks();
                 Log.d(TAG, "run: landmarks = " + landmarks);
-                for (Point point : landmarks) {
-                  int pointX = (int) (point.x * resizeRatio);
-                  int pointY = (int) (point.y * resizeRatio);
-                  canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
+                if (landmarks.size() > 0) {
+                  for (Point point : landmarks) {
+                    int pointX = (int) (point.x * resizeRatio);
+                    int pointY = (int) (point.y * resizeRatio);
+                    canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
+                  }
+                  mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                      mFaceDetectedListener.onLandmarkDetected(true);
+                    }
+                  });
+                } else {
+                  mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                      mFaceDetectedListener.onLandmarkDetected(false);
+                    }
+                  });
                 }
               }
 
-              //ImageUtils.saveBitmap(mActivity, mRGBframeBitmap);
-              //mFaceDetectedListener.onFaceDetected(mRGBframeBitmap);
+              //ImageUtils.saveBitmap(mActivity, mRGBFrameBitmap);
+              //mFaceDetectedListener.onFaceDetected(mRGBFrameBitmap);
+            } else {
+              mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  mFaceDetectedListener.onLandmarkDetected(false);
+                }
+              });
             }
 
             mWindow.setRGBBitmap(mCroppedBitmap);
@@ -289,11 +311,28 @@ public class OnGetImageListener implements OnImageAvailableListener {
   }
 
   public void saveImage() {
-    Matrix matrix = new Matrix();
-    matrix.postRotate(90);
-    Bitmap rotatedBitmap =  Bitmap.createBitmap(mRGBframeBitmap, 0, 0,
-        mRGBframeBitmap.getWidth(), mRGBframeBitmap.getHeight(), matrix, true);
-    Bitmap resizedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 640, 960, false);
-    ImageUtils.saveBitmap(mActivity, resizedBitmap);
+    Thread thread = new Thread() {
+      @Override
+      public void run() {
+        try {
+          Matrix matrix = new Matrix();
+          matrix.postRotate(90);
+          Bitmap rotatedBitmap = Bitmap.createBitmap(mRGBFrameBitmap, 0, 0,
+              mRGBFrameBitmap.getWidth(), mRGBFrameBitmap.getHeight(), matrix, true);
+          Bitmap resizedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 640, 960, false);
+          final File file = ImageUtils.saveBitmap(mActivity, resizedBitmap);
+          mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              mFaceDetectedListener.onFaceDetected(file.getAbsolutePath());
+            }
+          });
+          mIsComputing = true;
+        } catch (Exception e) {
+          Log.e(TAG, "run: ", e);
+        }
+      }
+    };
+    thread.start();
   }
 }

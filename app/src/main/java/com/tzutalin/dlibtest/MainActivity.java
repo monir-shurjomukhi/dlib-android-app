@@ -29,6 +29,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -215,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
           runDemosAsync(mTestImgPath);
           Toast.makeText(this, "Img Path:" + mTestImgPath, Toast.LENGTH_SHORT).show();
         }
-      } else if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK) {
-        File file = ImageUtils.saveBitmap(MainActivity.this, sBitmap);
-        Log.d(TAG, "onActivityResult: file.getAbsolutePath() = " + file.getAbsolutePath());
-        if (file.getAbsolutePath() != null) {
-          runDemosAsync(file.getAbsolutePath());
+      } else if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && null != data) {
+        String filePath = data.getStringExtra("filePath");
+        Log.d(TAG, "onActivityResult: filePath = " + filePath);
+        if (!TextUtils.isEmpty(filePath)) {
+          runDemosAsync(filePath);
         }
       } else {
         Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
