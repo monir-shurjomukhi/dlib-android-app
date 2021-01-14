@@ -312,7 +312,7 @@ public class CameraConnectionFragment extends Fragment {
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);
         Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-// Vibrate for 500 milliseconds
+        // Vibrate for 300 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           vibrator.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {

@@ -68,6 +68,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
   private int[] mRGBBytes = null;
   private Bitmap mRGBFrameBitmap = null;
   private Bitmap mCroppedBitmap = null;
+  private Bitmap mCroppedBitmapFace = null;
 
   private boolean mIsComputing = false;
   private Handler mInferenceHandler;
@@ -263,7 +264,23 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 bounds.right = (int) (ret.getRight() * resizeRatio);
                 bounds.bottom = (int) (ret.getBottom() * resizeRatio);
                 Canvas canvas = new Canvas(mCroppedBitmap);
-                canvas.drawRect(bounds, mFaceLandmarkPaint);
+                //canvas.drawRect(bounds, mFaceLandmarkPaint);
+
+                Log.d(TAG, "run: bounds = " + bounds);
+
+                try {
+                  mCroppedBitmapFace = Bitmap.createBitmap(mCroppedBitmap, bounds.left, bounds.top,
+                      bounds.right - bounds.left + 10, bounds.bottom - bounds.top);
+                } catch (Exception e) {
+                  Log.e(TAG, "run: ", e);
+                }
+
+                mActivity.runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                    mFaceDetectedListener.onLandmarkDetected(true);
+                  }
+                });
 
                 // Draw landmark
                 ArrayList<Point> landmarks = ret.getFaceLandmarks();
@@ -272,21 +289,21 @@ public class OnGetImageListener implements OnImageAvailableListener {
                   for (Point point : landmarks) {
                     int pointX = (int) (point.x * resizeRatio);
                     int pointY = (int) (point.y * resizeRatio);
-                    canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
+                    //canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
                   }
-                  mActivity.runOnUiThread(new Runnable() {
+                  /*mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                       mFaceDetectedListener.onLandmarkDetected(true);
                     }
-                  });
+                  });*/
                 } else {
-                  mActivity.runOnUiThread(new Runnable() {
+                  /*mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                       mFaceDetectedListener.onLandmarkDetected(false);
                     }
-                  });
+                  });*/
                 }
               }
 
@@ -320,6 +337,32 @@ public class OnGetImageListener implements OnImageAvailableListener {
               mRGBFrameBitmap.getWidth(), mRGBFrameBitmap.getHeight(), matrix, true);
           Bitmap resizedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 640, 960, false);
           final File file = ImageUtils.saveBitmap(mActivity, resizedBitmap);
+          mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              mFaceDetectedListener.onFaceDetected(file.getAbsolutePath());
+            }
+          });
+          mIsComputing = true;
+        } catch (Exception e) {
+          Log.e(TAG, "run: ", e);
+        }
+      }
+    };
+    thread.start();
+  }
+
+  public void saveFaceImage() {
+    Thread thread = new Thread() {
+      @Override
+      public void run() {
+        try {
+          /*Matrix matrix = new Matrix();
+          matrix.postRotate(90);
+          Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+              bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+          Bitmap resizedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 640, 960, false);*/
+          final File file = ImageUtils.saveBitmap(mActivity, mCroppedBitmapFace);
           mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

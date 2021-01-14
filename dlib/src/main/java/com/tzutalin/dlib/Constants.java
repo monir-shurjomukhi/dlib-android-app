@@ -6,9 +6,7 @@ import android.util.Log;
 
 import java.io.File;
 
-/**
- * Created by darrenl on 2016/4/22.
- */
+
 public final class Constants {
   private static final String TAG = "Constants";
 
