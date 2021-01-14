@@ -230,6 +230,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
 
     mRGBFrameBitmap.setPixels(mRGBBytes, 0, mPreviewWidth, 0, 0, mPreviewWidth, mPreviewHeight);
     drawResizedBitmap(mRGBFrameBitmap, mCroppedBitmap);
+    //mCroppedBitmap = mRGBFrameBitmap;
 
     if (SAVE_PREVIEW_BITMAP) {
       ImageUtils.saveBitmap(mActivity, mCroppedBitmap);
@@ -249,7 +250,6 @@ public class OnGetImageListener implements OnImageAvailableListener {
             List<VisionDetRet> results;
             synchronized (OnGetImageListener.this) {
               results = mFaceDet.detect(mCroppedBitmap);
-              //results = mPedestrianDet.detect(mCroppedBitmap);
             }
             long endTime = System.currentTimeMillis();
             mTransparentTitleView.setText("Time cost: " + String.valueOf((endTime - startTime) / 1000f) + " sec");
@@ -264,7 +264,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
                 bounds.right = (int) (ret.getRight() * resizeRatio);
                 bounds.bottom = (int) (ret.getBottom() * resizeRatio);
                 Canvas canvas = new Canvas(mCroppedBitmap);
-                //canvas.drawRect(bounds, mFaceLandmarkPaint);
+                canvas.drawRect(bounds, mFaceLandmarkPaint);
 
                 Log.d(TAG, "run: bounds = " + bounds);
 
@@ -289,7 +289,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
                   for (Point point : landmarks) {
                     int pointX = (int) (point.x * resizeRatio);
                     int pointY = (int) (point.y * resizeRatio);
-                    //canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
+                    canvas.drawCircle(pointX, pointY, 2, mFaceLandmarkPaint);
                   }
                   /*mActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -318,7 +318,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
               });
             }
 
-            mWindow.setRGBBitmap(mCroppedBitmap);
+            mWindow.setRGBBitmap(mRGBFrameBitmap);
             mIsComputing = false;
           }
         });
