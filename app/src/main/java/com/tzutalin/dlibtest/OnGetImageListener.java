@@ -318,7 +318,7 @@ public class OnGetImageListener implements OnImageAvailableListener {
               });
             }
 
-            mWindow.setRGBBitmap(mRGBFrameBitmap);
+            mWindow.setRGBBitmap(mCroppedBitmap);
             mIsComputing = false;
           }
         });
